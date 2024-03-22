@@ -1,25 +1,26 @@
 "use client";
 import {useFormContextState} from "@/app/lib/hooks/useFormState";
-import {useReducer, useState} from "react";
+import {useEffect, useReducer, useState} from "react";
 import {useLoginStore} from "@/app/lib/store/store";
 import toast from "react-hot-toast";
 import {signIn} from "next-auth/react";
 import {useRouter, useSearchParams} from "next/navigation";
 import {useForm} from "react-hook-form";
+import {GoogleAuthProvider, signInWithPopup} from "@firebase/auth";
+import {auth, provider} from "@/utils/firebase";
 
 export default function LoginForm() {
 
-
-    const { email, setEmail } = useLoginStore();
+    const {email, password, setEmail, setPassword} = useLoginStore();
 
     const router = useRouter()
     const searchParams = useSearchParams()
 
     const [loginRequest, dispatch] = useReducer((state: any, action: any) => {
-        return { ...state, ...action }
+        return {...state, ...action}
     }, {
-        email: email || '' ,
-        password: '',
+        email: email || '',
+        password: password || '',
         loginError: '',
         emailError: false,
         passwordError: false,
@@ -28,25 +29,24 @@ export default function LoginForm() {
 
     function checkError(result: any) {
         if (result?.error == "User not found") {
-            dispatch({ loginError: result?.error! })
-            dispatch({ userIdError: true, passwordError: false })
+            dispatch({loginError: result?.error!})
+            dispatch({userIdError: true, passwordError: false})
             return;
-        }
-        else if (result?.error == "Password is incorrect") {
-            dispatch({ loginError: result.error! })
-            dispatch({ userIdError: false, passwordError: true })
+        } else if (result?.error == "Password is incorrect") {
+            dispatch({loginError: result.error!})
+            dispatch({userIdError: false, passwordError: true})
             return;
-        }
-        else {
-            dispatch({ loginError: result?.error! })
+        } else {
+            dispatch({loginError: result?.error!})
             return;
         }
     }
 
     async function handleClick(e: React.FormEvent<HTMLFormElement>) {
+
         e.preventDefault()
         if (loginRequest.submitting) return;
-        dispatch({ submitting: true })
+        dispatch({submitting: true})
         const toastId = toast.loading('Logging...')
         try {
 
@@ -59,6 +59,7 @@ export default function LoginForm() {
                 password: loginRequest.password,
                 callbackUrl: url.toString(),
                 redirect: false,
+                credentialType: 'login'
             })
 
             console.log("result", result?.url!)
@@ -73,25 +74,127 @@ export default function LoginForm() {
         } catch (e) {
             console.log('error', e)
 
-        }
-        finally {
+        } finally {
             toast.dismiss(toastId)
-            dispatch({ submitting: false })
+            dispatch({submitting: false})
         }
     }
 
     function handleChange(e: any) {
-        dispatch({ loginError: '' })
-        dispatch({ [e.target.name]: e.target.value })
-        dispatch({ [e.target.name + "Error"]: false })
+        dispatch({loginError: ''})
+        dispatch({[e.target.name]: e.target.value})
+        dispatch({[e.target.name + "Error"]: false})
     }
 
     // console.log("loginRequest.email", loginRequest.email)
     // console.log("loginRequest.password", loginRequest.password)
 
-    return(
+    // const handleGoogleSignIn = async () => {
+    //     // setIsClickGoogle(true);
+    //     signInWithPopup(auth, provider)
+    //         .then((result) => {
+    //             const credential = GoogleAuthProvider.credentialFromResult(result);
+    //             console.log("credential", credential);
+    //             console.log("result", result);
+    //             const name = result?.user?.displayName;
+    //             const email = result?.user?.email;
+    //             const uuid = result?.user?.uid;
+    //             const providerId = result?.providerId;
+    //
+    //             // const userData = {
+    //             //     email: email,
+    //             //     uuId: uuid,
+    //             //     user_name: name,
+    //             //     type_thirdParty: providerId,
+    //             // }
+    //
+    //             // thirdParty(userData)
+    //             // navigate("/user/home");
+    //             try {
+    //
+    //                 const url = new URL('/product', location.href)
+    //                 // url.searchParams.delete('start_date')
+    //                 // url.searchParams.delete('end_date')
+    //                 console.log("url", url)
+    //                 const result = await signIn("credentials", {
+    //                     email: loginRequest.email,
+    //                     password: loginRequest.password,
+    //                     callbackUrl: url.toString(),
+    //                     redirect: false,
+    //                     credentialType: 'login'
+    //                 })
+    //
+    //                 console.log("result", result?.url!)
+    //
+    //                 checkError(result);
+    //                 if (result?.ok) {
+    //                     router.push(result?.url!)
+    //                     return;
+    //                 }
+    //
+    //                 toast.error('Login failed')
+    //             } catch (e) {
+    //                 console.log('error', e)
+    //
+    //             } finally {
+    //                 // toast.dismiss(toastId)
+    //                 dispatch({submitting: false})
+    //             }
+    //
+    //         }).catch((err) => {
+    //         toast.error(err);
+    //     })
+    // };
+
+    const handleGoogleSignIn = async () => {
+        // setIsClickGoogle(true);
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            console.log("credential", credential);
+            console.log("result", result);
+            const name = result?.user?.displayName;
+            const email = result?.user?.email;
+            const uuid = result?.user?.uid;
+            const providerId = result?.providerId;
+
+            try {
+                const url = new URL("/product", location.href);
+                // url.searchParams.delete('start_date')
+                // url.searchParams.delete('end_date')
+                console.log("url", url);
+                const signInResult = await signIn("credentials", {
+                    email: email,
+                    password: uuid,
+                    callbackUrl: url.toString(),
+                    redirect: false,
+                    credentialType: "thirdPartyLogin",
+                });
+
+                console.log("signInResult", signInResult?.url!);
+
+                checkError(signInResult);
+                if (signInResult?.ok) {
+                    router.push(signInResult?.url!);
+                    return;
+                }
+
+                toast.error("Login failed");
+            } catch (signInError) {
+                console.log("signInError", signInError);
+            }
+        } catch (err) {
+            console.error("err", err);
+            // toast.error(err);
+        } finally {
+            // toast.dismiss(toastId);
+            dispatch({ submitting: false });
+        }
+    };
+
+    return (
         <>
-            <form className="ks_w100 ks_mt15" onSubmit={handleClick}  method="post">
+            <form className="ks_w100 ks_mt15" onSubmit={handleClick} method="post">
                 <div className="ks-wt-form-sub-container-dialog">
                     <label className="ks-wt-form-sub-contianer-title">WeTAX</label>
                     <div className="ks-wt-form-input-sub-container ks_d_flex ks_flex_col">
@@ -103,13 +206,13 @@ export default function LoginForm() {
                                 {/*        d="M4.02002 14.0981C3.67301 14.0981 3.40218 14.0199 3.20752 13.8633C3.01286 13.7109 2.91553 13.4993 2.91553 13.2285C2.91553 12.8434 3.03402 12.4393 3.271 12.0161C3.50798 11.5887 3.84652 11.1909 4.28662 10.8228C4.73096 10.4504 5.26628 10.1478 5.89258 9.91504C6.51888 9.68229 7.22135 9.56592 8 9.56592C8.77865 9.56592 9.479 9.68229 10.1011 9.91504C10.7274 10.1478 11.2627 10.4504 11.707 10.8228C12.1514 11.1909 12.4899 11.5887 12.7227 12.0161C12.9596 12.4393 13.0781 12.8434 13.0781 13.2285C13.0781 13.4993 12.9808 13.7109 12.7861 13.8633C12.5915 14.0199 12.3228 14.0981 11.98 14.0981H4.02002ZM8 8.51221C7.5599 8.51221 7.15576 8.39372 6.7876 8.15674C6.41943 7.91553 6.12533 7.59391 5.90527 7.19189C5.68522 6.78988 5.5752 6.33919 5.5752 5.83984C5.5752 5.35319 5.68522 4.91309 5.90527 4.51953C6.12533 4.12174 6.41943 3.80648 6.7876 3.57373C7.15999 3.34098 7.56413 3.22461 8 3.22461C8.4401 3.22461 8.84424 3.34098 9.2124 3.57373C9.58057 3.80225 9.87467 4.11328 10.0947 4.50684C10.319 4.90039 10.4312 5.34049 10.4312 5.82715C10.4312 6.33073 10.319 6.78564 10.0947 7.19189C9.87467 7.59391 9.58057 7.91553 9.2124 8.15674C8.84424 8.39372 8.4401 8.51221 8 8.51221Z"/>*/}
                                 {/*</svg>*/}
                                 <input
-                                       onChange={handleChange}
-                                       required
-                                       value={loginRequest.userId}
-                                       type="email"
-                                       name="email"
-                                       placeholder="Example@mail.com"
-                                       maxLength={150}/>
+                                    onChange={handleChange}
+                                    required
+                                    value={loginRequest.userId}
+                                    type="email"
+                                    name="email"
+                                    placeholder="Example@mail.com"
+                                    maxLength={150}/>
 
                             </div>
                             {/*{loginRequest.userIdError && <ErrorSvg message={(loginRequest.loginError)}/>}*/}
@@ -179,6 +282,10 @@ export default function LoginForm() {
                     {/*</Link>*/}
                 </div>
             </form>
+
+            <button onClick={handleGoogleSignIn} className="ks_btn ks_btn_pm">
+                Google Login
+            </button>
         </>
     )
 }

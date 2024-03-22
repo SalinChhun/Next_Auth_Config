@@ -26,10 +26,10 @@ export default function NextAuthProvider({children}: PropsWithChildren) {
             .forEach((t) => toast.dismiss(t.id)); // Dismiss – Use toast.remove(t.id) removal without animation
     }, [toasts]);
 
-    // useEffect(()=>{
-    //     // @ts-ignore
-    //     import("bootstrap/dist/js/bootstrap.bundle.min.js");
-    // },[])
+    useEffect(()=>{
+        // @ts-ignore
+        import("bootstrap/dist/js/bootstrap.bundle.min.js");
+    },[])
 
     useEffect(() => {
 

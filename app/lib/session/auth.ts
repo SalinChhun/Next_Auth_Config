@@ -3,7 +3,7 @@ import NextAuth, {NextAuthOptions, User, Session} from "next-auth";
 import {AuthRequest} from "@/app/types/auth";
 import authService from "@/app/service/auth.service";
 import CredentialsProvider from "next-auth/providers/credentials"
-import {PasswordUtils} from "@/app/utils/PasswordUtils";
+import {PasswordUtils} from "@/utils/PasswordUtils";
 
 export const jwt = async ({token, user}: { token: JWT; user?: User }) => {
 
@@ -38,22 +38,35 @@ export const authOption: NextAuthOptions = ({
             name: "Credentials",
             credentials: {
                 email: {},
-                password: {}
+                password: {},
+                credentialType: {}
             },
             async authorize(credentials, req) {
                 const authRequest: AuthRequest = {
                     email: credentials?.email!,
                     // password: PasswordUtils.encrypt(credentials?.password!)
-                    password: credentials?.password!
+                    password: credentials?.password!,
                 }
-                const response = await authService.login(authRequest)
-                    .catch(err => err);
-                console.log(response?.data);
 
-                if (response.status === 200) {
-                    return response.data;
+                console.log("auth request", credentials?.credentialType)
+
+                if (credentials?.credentialType === "login") {
+                    const response = await authService.login(authRequest)
+                        .catch(err => err);
+                    console.log(response?.data);
+                    if (response.status === 200) {
+                        return response.data;
+                    }
+                    throw new Error(response?.message || "Invalid username or password")
+                } else if (credentials?.credentialType === "thirdPartyLogin") {
+                    const response = await authService.thirdPartyLogin(authRequest)
+                        .catch(err => err);
+                    console.log(response?.data);
+                    if (response.status === 200) {
+                        return response.data;
+                    }
+                    throw new Error(response?.message || "Invalid username or password")
                 }
-                throw new Error(response?.message || "Invalid username or password")
             }
         })
     ],
