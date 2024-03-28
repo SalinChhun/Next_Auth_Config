@@ -14,7 +14,8 @@ const SignUpForm = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("");
 
-    const handleSignup = () => {
+    const handleSignup = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
         const request: SignUpRequest = {
             firstname: firstName,
             lastname: lastName,
@@ -40,7 +41,7 @@ const SignUpForm = () => {
                     </a>
                     <h1 className="text-white h3 mt-3">Account Register</h1>
                 </div>
-                <form className="mt-4">
+                <form className="mt-4" onSubmit={handleSignup}>
                     <div className="input-group uf-input-group input-group-lg mb-3">
                         {/*<span className="input-group-text fa fa-user"></span>*/}
                         <svg className="input-group-text fa fa-user" viewBox="0 0 24 24" fill="none"
@@ -63,8 +64,12 @@ const SignUpForm = () => {
                                 </g>
                             </g>
                         </svg>
-                        <input onChange={(e) => setFirstName(e.target.value)} type="text" className="form-control"
-                               placeholder="Name"/>
+                        <input
+                            onChange={(e) => setFirstName(e.target.value)}
+                            type="text"
+                            className="form-control"
+                            placeholder="Name"
+                        />
                     </div>
                     {/*<div className="input-group uf-input-group input-group-lg mb-3">*/}
                     {/*    <span className="input-group-text fa fa-user"></span>*/}
@@ -90,17 +95,27 @@ const SignUpForm = () => {
                             </g>
 
                         </svg>
-                        <input required onChange={(e) => setEmail(e.target.value)} type="text" className="form-control"
-                               placeholder="Email address"/>
+                        <input
+                            required
+                            onChange={(e) => setEmail(e.target.value)}
+                            type="text"
+                            className="form-control"
+                            placeholder="Email address"
+                        />
                     </div>
                     <div className="input-group uf-input-group input-group-lg mb-3">
                         {/*<span className="input-group-text fa fa-lock"></span>*/}
                         <img src="icon/pass.png" className="input-group-text fa fa-lock"/>
-                        <input required onChange={(e) => setPassword(e.target.value)} type="password"
-                               className="form-control" placeholder="Password"/>
+                        <input
+                            required
+                            onChange={(e) => setPassword(e.target.value)}
+                            type="password"
+                            className="form-control"
+                            placeholder="Password"
+                        />
                     </div>
                     <div className="d-grid mb-4">
-                        <button type="button" onClick={handleSignup} className="btn uf-btn-primary btn-lg">Sign Up
+                        <button type="submit" className="btn uf-btn-primary btn-lg">Sign Up
                         </button>
                     </div>
                     <div className="mt-4 text-center">
