@@ -64,7 +64,12 @@ const ResetPassword = () => {
                     </div>
                     <div className="d-grid mb-4">
                         <button type="submit" className="btn uf-btn-primary btn-lg">
-                            Submit
+                            {
+                                resetPasswordMutation.isLoading ?
+                                    <Spinner animation="border" style={{width: 18, height: 18, marginRight: 5}} role="status">
+                                        <span className="visually-hidden d-flex justify-content-center">Loading...</span>
+                                    </Spinner> : "Submit"
+                            }
                         </button>
                     </div>
                 </form>

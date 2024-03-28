@@ -23,12 +23,8 @@ const PinCodeExpiredTime = ({ email }: { email: any }) => {
 
     const handleResendClick = () => {
         generatePinCodeMutation.mutation(email);
-
-    };
-
-    if (generatePinCodeMutation.isSuccess) {
         setSeconds(60);
-    }
+    };
 
     return (
         <div className="pin-time">

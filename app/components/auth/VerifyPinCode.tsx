@@ -5,6 +5,7 @@ import {useRouter, useSearchParams} from "next/navigation";
 import {ConfirmPinCodeRequest} from "@/app/types/auth";
 import {button} from "@material-tailwind/react";
 import PinCodeExpiredTime from "@/app/components/auth/PinCodeExpiredTime";
+import {Spinner} from "react-bootstrap";
 
 const VerifyPinCode = () => {
 
@@ -128,7 +129,14 @@ const VerifyPinCode = () => {
                         </div>
                     </div>
                     <div className="d-grid mb-4">
-                        <button type="submit" className="btn uf-btn-primary btn-lg">Verify</button>
+                        <button type="submit" className="btn uf-btn-primary btn-lg">
+                            {
+                                verifyPinCodeMutation.isLoading ?
+                                    <Spinner animation="border" style={{width: 18, height: 18, marginRight: 5}} role="status">
+                                        <span className="visually-hidden d-flex justify-content-center">Loading...</span>
+                                    </Spinner> : "Verify"
+                            }
+                        </button>
                         <PinCodeExpiredTime email={email}/>
                     </div>
                 </form>
