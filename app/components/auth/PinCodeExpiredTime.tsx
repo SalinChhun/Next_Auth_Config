@@ -7,6 +7,8 @@ const PinCodeExpiredTime = ({ email }: { email: any }) => {
     const generatePinCodeMutation = useAuthMutation.useGeneratePinCode();
     const [seconds, setSeconds] = useState(60);
 
+    console.log("generatePinCodeMutation.data", generatePinCodeMutation.data);
+
     useEffect(() => {
         let intervalId: NodeJS.Timeout;
 
@@ -21,8 +23,12 @@ const PinCodeExpiredTime = ({ email }: { email: any }) => {
 
     const handleResendClick = () => {
         generatePinCodeMutation.mutation(email);
-        setSeconds(60); // Reset seconds to 60 when Resend button is clicked
+
     };
+
+    if (generatePinCodeMutation.isSuccess) {
+        setSeconds(60);
+    }
 
     return (
         <div className="pin-time">
