@@ -48,3 +48,13 @@ export interface ColorResponse {
     id:  number;
     color_name: string;
 }
+
+export interface ProductImage {
+    photo: string;
+}
+
+export interface CreateProductRequest {
+    model_id: number;
+    color_id: number;
+    product_image: ProductImage[];
+}

@@ -5,7 +5,7 @@ const ServiceId = {
     MODEL: '/api/v1/model',
 }
 
-const getModelList = async (): Promise<BaseResponse<ModelResponse>> => {
+const getModelList = async (): Promise<ModelResponse[]> => {
     const result = await http.get(ServiceId.MODEL + `/getAllModel`);
     return result.data?.data;
 }

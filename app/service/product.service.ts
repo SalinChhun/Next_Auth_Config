@@ -6,10 +6,10 @@ const ServiceId = {
 }
 
 const createProduct = (requestBody: any) => {
-    return http.post(ServiceId.PRODUCT + '/createNewProduct',requestBody).catch(err => err);
+    return http.post(ServiceId.PRODUCT + '/createNewProduct',requestBody);
 }
 
-const getProductList = async (params: any): Promise<BaseResponse<ProductResponse>> => {
+const getProductList = async (params: any): Promise<ProductResponse> => {
     const result = await http.get(ServiceId.PRODUCT + `/getAllProducts`, {params});
     return result.data?.data;
 }

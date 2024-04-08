@@ -8,6 +8,7 @@ import {useRouter, useSearchParams} from "next/navigation";
 import {useForm} from "react-hook-form";
 import {GoogleAuthProvider, signInWithPopup} from "@firebase/auth";
 import {auth, provider} from "@/utils/firebase";
+import {Spinner} from "react-bootstrap";
 
 export default function LoginForm() {
     const baseUrl = `${process.env.NEXT_PUBLIC_BASE_URL}`;
@@ -201,7 +202,13 @@ export default function LoginForm() {
                     <a href={baseUrl + "/generate-pincode"}>Forgot password?</a>
                 </div>
                 <div className="d-grid mb-4">
-                    <button type="submit" className="btn uf-btn-primary btn-lg">Login</button>
+                    <button type="submit" className="btn uf-btn-primary btn-lg">
+                        {/* eslint-disable-next-line react/jsx-no-undef */}
+                        {loginRequest.submitting ?
+                            <Spinner animation="border" style={{ width: 18, height: 18, marginRight: 5 }} role="status">
+                                <span className="visually-hidden d-flex justify-content-center">Loading...</span>
+                            </Spinner> : 'Login'}
+                    </button>
                 </div>
                 <div className="d-flex mb-3">
                     <div className="dropdown-divider m-auto w-25"></div>

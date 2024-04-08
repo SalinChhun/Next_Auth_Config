@@ -7,7 +7,7 @@ const useFetchProducts = () =>{
     const reqParams = {
         page_size: searchParams.get("page_size") ?? 10,
         page_number: searchParams.get("page_number") ?? 0,
-        // search_value: searchParams.get("search_value") ?? "",
+        search_value: searchParams.get("search_value") ?? "",
         sort_columns: searchParams.get("sort_columns") ?? "",
     }
 
@@ -19,8 +19,8 @@ const useFetchProducts = () =>{
     return {
         isLoading,
         isError,
-        product_list: data ?? [],
-        // pagination: data,
+        product_list: data?.products ?? [],
+        pagination: data?.pagination,
     }
 }
 

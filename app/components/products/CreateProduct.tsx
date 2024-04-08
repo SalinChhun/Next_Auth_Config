@@ -1,25 +1,22 @@
 import {useEffect, useState} from "react";
-import {Modal, Button} from 'react-bootstrap';
-import {productService} from "@/app/service/product.service";
-import toast from "react-hot-toast";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {Button, Modal} from 'react-bootstrap';
+import {useQueryClient} from "@tanstack/react-query";
 import useFetchModel from "@/app/lib/hooks/useFetchModel";
 import useFetchColor from "@/app/lib/hooks/useFetchColor";
-import {number} from "prop-types";
+import {useProductMutation} from "@/app/lib/hooks/useProductMutation";
+import {CreateProductRequest} from "@/app/types/common";
 
 const CreateProduct = () => {
 
 
     const queryClient = useQueryClient()
-
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
 
-
+    const createProductMutation = useProductMutation.useCreateProduct();
     const {model_list} = useFetchModel();
     const {color_list} = useFetchColor();
-
     const [model, setModel] = useState(model_list.length > 0 ? model_list[0]?.id : 0);
     const [color, setColor] = useState(color_list.length > 0 ? color_list[0]?.id : 0);
 
@@ -35,43 +32,18 @@ const CreateProduct = () => {
     console.log("model", model);
     console.log("color", color);
 
-    const createProductRequest = {
-        "model_id": model,
-        "color_id": color
-    }
 
+    const handleSubmit = () => {
+        const request: CreateProductRequest = {
+            model_id: model,
+            color_id: color,
+            product_image: []
 
-    const handleSubmit = async () => {
-        try {
-            const response = await productService.createProduct(createProductRequest);
-            console.log("Response:", response);
-            if (response?.status !== 200) {
-                toast.error(response?.message);
-            } else {
-                queryClient.invalidateQueries({ queryKey: ['products'] });
-                handleClose();
-                toast.success("Create new product successfully!");
-            }
-        } catch (error) {
-            console.error("Error creating product:", error);
         }
+        createProductMutation.mutation(request);
+        handleClose();
     }
 
-    // const { mutate: createProduct } = useMutation(
-    //     {
-    //         mutationFn: () => productService.createProduct(createProductRequest),
-    //         onSuccess: () => {
-    //             toast.success("Create new product successfully!");
-    //             handleClose();
-    //             queryClient.invalidateQueries({ queryKey: ['products'] });
-    //         },
-    //         onError: (error) => {
-    //             console.error("Error creating product:", error);
-    //             // Handle error here, e.g., show error message
-    //             toast.error("Failed to create new product. Please try again later.");
-    //         }
-    //     }
-    // );
 
     return (
         <>
@@ -93,14 +65,14 @@ const CreateProduct = () => {
                                     Select Model Name
                                 </label>
                                 <select name="categoryId" className="form-select" aria-label="Default select example"
-                                    onChange={(e) => {
-                                        const value = parseInt(e.target.value);
-                                        if (!isNaN(value)) {
-                                            setModel(value);
-                                        }
-                                    }}
+                                        onChange={(e) => {
+                                            const value = parseInt(e.target.value);
+                                            if (!isNaN(value)) {
+                                                setModel(value);
+                                            }
+                                        }}
                                 >
-                                    {model_list?.map((model) => (
+                                    {model_list?.map((model: any) => (
                                         // eslint-disable-next-line react/jsx-key
                                         <option value={model?.id}>{model?.name}</option>
                                     ))}
@@ -118,7 +90,7 @@ const CreateProduct = () => {
                                             }
                                         }}
                                 >
-                                    {color_list?.map((color) => (
+                                    {color_list?.map((color: any) => (
                                         // eslint-disable-next-line react/jsx-key
                                         <option value={color?.id}>{color?.color_name}</option>
                                     ))}

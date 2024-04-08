@@ -1,7 +1,7 @@
 import {PropsWithChildren} from "react";
-// import "@/app/styles/ks_bootstrap.css";
-// import "@/app/styles/we-tax.css";
+import "@/app/styles/ps-boostrap.css";
 import "@/app/styles/globals.css";
+import "@/app/styles/phone-shop.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import NextAuthProvider from "@/app/components/NextAuthProvider";
 // import NextAuthProvider from "@/app/components/NextAuthProvider";
