@@ -6,6 +6,7 @@ import RCPagination from "rc-pagination";
 import {Pagination} from "@/app/types/common";
 
 const PaginationUI = ({data, rowSelected = 0}: { data: Pagination, rowSelected?: number }) => {
+    // console.log("pagination data", data)
     const {
         total_pages,
         current_page,

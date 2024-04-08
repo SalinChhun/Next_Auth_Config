@@ -29,8 +29,8 @@ const CreateProduct = () => {
         }
     }, [model_list, color_list]);
 
-    console.log("model", model);
-    console.log("color", color);
+    // console.log("model", model);
+    // console.log("color", color);
 
 
     const handleSubmit = () => {
