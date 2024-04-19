@@ -1,6 +1,6 @@
 import {JWT} from "next-auth/jwt";
 import NextAuth, {NextAuthOptions, User, Session} from "next-auth";
-import {AuthRequest} from "@/app/types/auth";
+import {AuthRequest} from "@/app/lib/types/auth";
 import authService from "@/app/service/auth.service";
 import CredentialsProvider from "next-auth/providers/credentials"
 import {PasswordUtils} from "@/utils/PasswordUtils";

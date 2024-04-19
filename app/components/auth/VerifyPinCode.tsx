@@ -2,7 +2,7 @@
 import React, {useEffect, useState} from "react";
 import useAuthMutation from "@/app/lib/hooks/useAuthMutation";
 import {useRouter, useSearchParams} from "next/navigation";
-import {ConfirmPinCodeRequest} from "@/app/types/auth";
+import {ConfirmPinCodeRequest} from "@/app/lib/types/auth";
 import {button} from "@material-tailwind/react";
 import PinCodeExpiredTime from "@/app/components/auth/PinCodeExpiredTime";
 import {Spinner} from "react-bootstrap";

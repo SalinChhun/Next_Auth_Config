@@ -4,12 +4,10 @@ import useFetchProducts from "@/app/lib/hooks/useFetchProducts";
 import CreateProduct from "@/app/components/products/CreateProduct";
 import {getCoreRowModel, useReactTable, VisibilityState} from "@tanstack/react-table";
 import {useSortingState} from "@/app/lib/hooks/useSortingState";
-import React, {useEffect} from "react";
+import React from "react";
 import {DefaultColumns} from "@/app/components/products/DefaultColumns";
 import DataTable from "@/app/components/shared/DataTable";
 import PaginationUI from "@/app/components/shared/Pagination";
-import useStorage from "@/app/lib/hooks/useStorage";
-import {SessionStorageKey} from "@/utils/enum";
 import {useProductStore} from "@/app/lib/store/store";
 import ProductModal from "@/app/components/products/ProductModal";
 
@@ -19,9 +17,9 @@ const ProductList = () => {
     const {product_list, pagination} = useFetchProducts();
     const {sorting, onSortingChange} = useSortingState();
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
-    const profile = 252;
-    const {getItem} = useStorage();
-    const showColumns = getItem(`${SessionStorageKey.PRODUCTS}-${profile}-20231025`);
+    // const profile = 252;
+    // const {getItem} = useStorage();
+    // const showColumns = getItem(`${SessionStorageKey.PRODUCTS}-${profile}-20231025`);
     const handleLogout = () => {
         if (confirm("Do you really want to Logout?")) {
             signOut();
@@ -30,7 +28,7 @@ const ProductList = () => {
 
     const table = useReactTable({
         enableGlobalFilter: false,
-        data: product_list,
+        data: product_list || [],
         columns: DefaultColumns,
         state: {
             sorting,
@@ -60,7 +58,6 @@ const ProductList = () => {
                         <DataTable
                             table={table}
                             handleRowClick={(data) => {
-                                console.log("row clicked")
                                 setOpen(true);
                                 setIsUpdate(true);
                                 setUpdateData(data);

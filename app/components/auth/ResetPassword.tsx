@@ -3,7 +3,7 @@ import React, {useState} from "react";
 import useAuthMutation from "@/app/lib/hooks/useAuthMutation";
 import {useRouter, useSearchParams} from "next/navigation";
 import {Spinner} from "react-bootstrap";
-import {ResetPasswordRequest} from "@/app/types/auth";
+import {ResetPasswordRequest} from "@/app/lib/types/auth";
 
 const ResetPassword = () => {
 

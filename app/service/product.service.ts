@@ -1,5 +1,5 @@
 import {http} from "@/utils/http";
-import {BaseResponse, ProductResponse} from "@/app/types/common";
+import {BaseResponse, ProductResponse} from "@/app/lib/types/common";
 
 const ServiceId = {
     PRODUCT: '/api/v1/product',

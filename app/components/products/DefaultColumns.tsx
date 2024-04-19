@@ -1,5 +1,5 @@
 import {ColumnDef} from "@tanstack/react-table";
-import {Product, ProductResponse} from "@/app/types/common";
+import {Product, ProductResponse} from "@/app/lib/types/common";
 import IndeterminateCheckbox from "@/app/components/shared/IndeterminateCheckbox";
 
 export const DefaultColumns: ColumnDef<Product>[] = [

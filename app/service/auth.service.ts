@@ -1,5 +1,5 @@
 
-import {AuthRequest, SignUpRequest} from "@/app/types/auth";
+import {AuthRequest, SignUpRequest} from "@/app/lib/types/auth";
 import {http} from "@/utils/http";
 
 

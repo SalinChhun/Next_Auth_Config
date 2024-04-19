@@ -4,7 +4,7 @@ import {useQueryClient} from "@tanstack/react-query";
 import useFetchModel from "@/app/lib/hooks/useFetchModel";
 import useFetchColor from "@/app/lib/hooks/useFetchColor";
 import {useProductMutation} from "@/app/lib/hooks/useProductMutation";
-import {CreateProductRequest} from "@/app/types/common";
+import {CreateProductRequest} from "@/app/lib/types/common";
 
 const CreateProduct = () => {
 

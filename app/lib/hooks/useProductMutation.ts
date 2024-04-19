@@ -1,6 +1,6 @@
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import {CreateProductRequest} from "@/app/types/common";
+import {CreateProductRequest} from "@/app/lib/types/common";
 import {productService} from "@/app/service/product.service";
 
 const createProduct = (request: CreateProductRequest) => {

@@ -3,7 +3,8 @@ import cn from 'clsx'
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {ChangeEvent} from "react";
 import RCPagination from "rc-pagination";
-import {Pagination} from "@/app/types/common";
+import {Pagination} from "@/app/lib/types/common";
+
 
 const PaginationUI = ({data, rowSelected = 0}: { data: Pagination, rowSelected?: number }) => {
     // console.log("pagination data", data)

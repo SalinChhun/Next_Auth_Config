@@ -1,7 +1,7 @@
 import {useMutation} from "@tanstack/react-query";
 import authService from "@/app/service/auth.service";
 import toast from "react-hot-toast";
-import {ConfirmPinCodeRequest, ResetPasswordRequest, SignUpRequest} from "@/app/types/auth";
+import {ConfirmPinCodeRequest, ResetPasswordRequest, SignUpRequest} from "@/app/lib/types/auth";
 
 const signup = (registerRequest: SignUpRequest) => {
     return authService.signup(registerRequest)

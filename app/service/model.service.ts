@@ -1,5 +1,5 @@
 import {http} from "@/utils/http";
-import {BaseResponse, ModelResponse} from "@/app/types/common";
+import {BaseResponse, ModelResponse} from "@/app/lib/types/common";
 
 const ServiceId = {
     MODEL: '/api/v1/model',

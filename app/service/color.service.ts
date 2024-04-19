@@ -1,5 +1,5 @@
 import {http} from "@/utils/http";
-import {BaseResponse, ColorResponse} from "@/app/types/common";
+import {BaseResponse, ColorResponse} from "@/app/lib/types/common";
 
 const ServiceId = {
     COLOR: '/api/v1/color',
