@@ -19,6 +19,18 @@ export interface Pagination {
     total_elements:         number;
 }
 
+export interface User {
+    "id": number,
+    "first_name": string,
+    "last_name": number,
+    "email": number,
+}
+
+export interface UserResponse {
+    users:  User[];
+    pagination: Pagination;
+}
+
 export interface Product {
     "product_id": number,
     "product_name": string,

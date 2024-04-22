@@ -1,18 +1,28 @@
 import React, {useEffect, useState} from 'react'
 import {over} from 'stompjs';
 import SockJS from 'sockjs-client';
+import {useSession} from "next-auth/react";
+import {getServerSession} from "next-auth";
+import {authOption} from "@/app/lib/session";
+import {redirect, useRouter, useSearchParams} from "next/navigation";
+import LoginForm from "@/app/components/auth/LoginForm";
 
 var stompClient: any = null;
 const ChatRoom = () => {
+
+    const userName = useSearchParams().get("userName");
+
+
     const [privateChats, setPrivateChats] = useState(new Map());
     const [publicChats, setPublicChats] = useState<any[]>([]);
     const [tab, setTab] = useState("CHATROOM");
     const [userData, setUserData] = useState({
-        username: '',
+        username: userName,
         receiverName: '',
         connected: false,
         message: ''
     });
+    console.log("userData", userData)
     useEffect(() => {
         console.log(userData);
     }, [userData]);
@@ -112,11 +122,16 @@ const ChatRoom = () => {
         const {value} = event.target;
         setUserData({...userData, "username": value});
     }
+    const { data: session, status } = useSession();
 
-    // const registerUser = () => {
-    //     connect();
+    useEffect(() => {
+        connect();
+    }, []);
+
+    // if (userData.username == "") {
+    //     setUserData({...userData, "username": userName || ""});
     // }
-    // @ts-ignore
+
     return (
         <div className="chat-container">
             {userData.connected ?
@@ -151,7 +166,7 @@ const ChatRoom = () => {
                         <div className="send-message">
                             <input type="text" className="input-message" placeholder="enter the message"
                                    value={userData.message} onChange={handleMessage}/>
-                            <button type="button" className="send-button" onClick={sendValue}>send</button>
+                            <button type="button" className="send-button chat-btn" onClick={sendValue}>send</button>
                         </div>
                     </div>}
                     {tab !== "CHATROOM" && <div className="chat-content">
@@ -181,7 +196,7 @@ const ChatRoom = () => {
                         id="user-name"
                         placeholder="Enter your name"
                         name="userName"
-                        value={userData.username}
+                        // value={userData.username}
                         onChange={handleUsername}
                         // margin="normal"
                     />
